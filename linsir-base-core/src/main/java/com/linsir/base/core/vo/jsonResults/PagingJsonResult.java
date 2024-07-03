@@ -1,11 +1,14 @@
 package com.linsir.base.core.vo.jsonResults;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.linsir.base.core.constant.CommonConstant;
 import com.linsir.base.core.constant.Cons;
 import com.linsir.base.core.util.S;
 import com.linsir.base.core.util.V;
 import com.linsir.base.core.vo.Pagination;
+import lombok.Getter;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,10 @@ import java.util.List;
  * @modified By：
  * @version:
  */
+@Getter
 public class PagingJsonResult<T> extends JsonResult {
+
+    @Serial
     private static final long serialVersionUID = -3062032234729254533L;
 
     /***
@@ -30,8 +36,8 @@ public class PagingJsonResult<T> extends JsonResult {
     /**
      * 默认成功，无返回数据
      */
-    public PagingJsonResult(JsonResult jsonResult, Pagination pagination){
-        super(jsonResult.getCode(), jsonResult.getMsg(), jsonResult.getData());
+    public PagingJsonResult(JsonResult<T> jsonResult, Pagination pagination){
+        super(jsonResult.getCode(), jsonResult.getMessage(), jsonResult.getData());
         this.page = pagination;
     }
 
@@ -45,6 +51,7 @@ public class PagingJsonResult<T> extends JsonResult {
         pagination.setPageIndex((int)iPage.getCurrent());
         pagination.setPageSize((int)iPage.getSize());
         pagination.setTotalCount(iPage.getTotal());
+
         if(V.notEmpty(iPage.orders())){
             List<String> orderByList = new ArrayList<>();
             iPage.orders().stream().forEach(o ->{
@@ -52,21 +59,20 @@ public class PagingJsonResult<T> extends JsonResult {
                     orderByList.add(o.getColumn());
                 }
                 else{
-                    orderByList.add(o.getColumn() + ":" + Cons.ORDER_DESC);
+                    orderByList.add(o.getColumn() + ":" + CommonConstant.ORDER_DESC);
                 }
             });
             pagination.setOrderBy(S.join(orderByList));
         }
         this.page = pagination;
+
         this.data(iPage.getRecords());
     }
+
 
     public PagingJsonResult<T> setPage(Pagination pagination){
         this.page = pagination;
         return this;
     }
 
-    public Pagination getPage() {
-        return page;
-    }
 }

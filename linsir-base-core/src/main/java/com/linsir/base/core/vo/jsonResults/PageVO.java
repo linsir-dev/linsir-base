@@ -16,7 +16,7 @@ import java.util.List;
  * 增加 字段 items for 前端
  * by linsir 2023.4.21
  */
-
+@Deprecated
 @Data
 public class PageVO<VO,S> {
 

@@ -12,7 +12,7 @@ package com.linsir.base.core.vo;
  *
  * @date 2022/2/4 15:14
  */
-
+@Deprecated
 public interface R<Head,Body>{
     Head getHead();
     Body getBody();

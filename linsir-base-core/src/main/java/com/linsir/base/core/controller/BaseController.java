@@ -19,9 +19,10 @@ import com.linsir.base.core.util.ContextHelper;
 import com.linsir.base.core.util.JSON;
 import com.linsir.base.core.util.S;
 import com.linsir.base.core.util.V;
-import com.linsir.base.core.vo.R;
 import com.linsir.base.core.vo.LabelValue;
 import com.linsir.base.core.vo.jsonResults.JsonResult;
+import com.linsir.base.core.vo.results.R;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ import java.util.function.Function;
 @Slf4j
 public class BaseController {
 
-    @Autowired
+    @Resource
     protected HttpServletRequest request;
 
 
@@ -61,6 +62,10 @@ public class BaseController {
         return result;
     }
 
+    /**
+     * 不带日志
+     *
+     * */
     protected JsonResult exec(JSONControllerCallable callable)
     {
         log.info(">>>URL:"+getRequestMappingURI());

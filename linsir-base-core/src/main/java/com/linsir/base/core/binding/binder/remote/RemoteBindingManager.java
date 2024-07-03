@@ -47,7 +47,7 @@ public class RemoteBindingManager {
             return mapList;
         }
         else{
-            log.warn("获取绑定数据失败: {}", jsonResult.getMsg());
+            log.warn("获取绑定数据失败: {}", jsonResult.getMessage());
             return Collections.EMPTY_LIST;
         }
     }
@@ -70,7 +70,7 @@ public class RemoteBindingManager {
             return entityList;
         }
         else{
-            log.warn("获取绑定数据失败: {}", jsonResult.getMsg());
+            log.warn("获取绑定数据失败: {}", jsonResult.getMessage());
             return Collections.EMPTY_LIST;
         }
     }

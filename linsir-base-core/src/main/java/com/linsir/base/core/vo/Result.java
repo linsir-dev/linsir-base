@@ -16,6 +16,7 @@ import java.io.Serializable;
  * @email
  * @date  2019年1月19日
  */
+@Deprecated
 @Data
 public class Result<T> implements R<ICode,T>,Serializable {
 

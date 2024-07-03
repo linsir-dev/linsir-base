@@ -1,12 +1,16 @@
 package com.linsir.base.core.vo.jsonResults;
 
+import com.linsir.base.core.code.BaseCode;
+import com.linsir.base.core.code.ICode;
 import com.linsir.base.core.plugin.JsonResultFilter;
 import com.linsir.base.core.util.ContextHelper;
 import com.linsir.base.core.util.S;
 import com.linsir.base.core.util.V;
 import com.linsir.base.core.vo.Pagination;
 import com.linsir.base.core.vo.Status;
+import com.linsir.base.core.vo.results.R;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,7 +21,8 @@ import java.io.Serializable;
  * @version: 0.0.1
  */
 @SuppressWarnings("JavaDoc")
-public class JsonResult<T> implements Serializable {
+public class JsonResult<T> implements Serializable, R<Integer,String,T> {
+    @Serial
     private static final long serialVersionUID = 1001L;
 
     /***
@@ -27,11 +32,14 @@ public class JsonResult<T> implements Serializable {
     /***
      * 消息内容
      */
-    private String msg;
+    private String message;
     /***
      * 返回结果数据
      */
     private T data;
+
+
+
 
     /**
      * 默认成功，无返回数据
@@ -43,7 +51,7 @@ public class JsonResult<T> implements Serializable {
      * 成功或失败
      */
     public JsonResult(boolean ok){
-        this(ok ? Status.OK : Status.FAIL_OPERATION);
+        this(ok? BaseCode.SUCCESS:BaseCode.FAIL_OPERATION);
     }
 
     /**
@@ -51,7 +59,7 @@ public class JsonResult<T> implements Serializable {
      */
     public JsonResult(T data){
         this.code = Status.OK.code();
-        this.msg = Status.OK.label();
+        this.message = Status.OK.label();
         initMsg(null);
         this.data = data;
     }
@@ -60,43 +68,43 @@ public class JsonResult<T> implements Serializable {
      * 默认成功，有返回数据、及附加提示信息
      */
     public JsonResult(T data, String additionalMsg){
-        this.code = Status.OK.code();
-        this.msg = Status.OK.label();
+        this.code = BaseCode.SUCCESS.getCode();
+        this.message = BaseCode.SUCCESS.getMsg();
         initMsg(additionalMsg);
         this.data = data;
     }
 
     /***
      * 非成功，指定状态
-     * @param status
+     * @param code
      */
-    public JsonResult(Status status){
-        this.code = status.code();
-        this.msg = status.label();
+    public JsonResult(ICode code){
+        this.code = code.getCode();
+        this.message = code.getMsg();
         initMsg(null);
         this.data = null;
     }
 
     /***
      * 非成功，指定状态及附加提示信息
-     * @param status
+     * @param code
      * @param additionalMsg
      */
-    public JsonResult(Status status, String additionalMsg){
-        this.code = status.code();
-        this.msg = status.label();
+    public JsonResult(ICode code, String additionalMsg){
+        this.code = code.getCode();
+        this.message = code.getMsg();
         initMsg(additionalMsg);
         this.data = null;
     }
 
     /**
      * 非成功，指定状态、返回数据
-     * @param status
+     * @param code
      * @param data
      */
-    public JsonResult(Status status, T data){
-        this.code = status.code();
-        this.msg = status.label();
+    public JsonResult(ICode code, T data){
+        this.code = code.getCode();
+        this.message = code.getMsg();
         initMsg(null);
         this.data = data;
     }
@@ -104,9 +112,9 @@ public class JsonResult<T> implements Serializable {
     /**
      * 非成功，指定状态、返回数据、及附加提示信息
      */
-    public JsonResult(Status status, T data, String additionalMsg){
-        this.code = status.code();
-        this.msg = status.label();
+    public JsonResult(ICode code, T data, String additionalMsg){
+        this.code = code.getCode();
+        this.message = code.getMsg();
         initMsg(additionalMsg);
         this.data = data;
     }
@@ -114,24 +122,24 @@ public class JsonResult<T> implements Serializable {
     /***
      * 自定义JsonResult
      * @param code
-     * @param label
+     * @param message
      * @param data
      */
-    public JsonResult(int code, String label, T data){
+    public JsonResult(int code, String message, T data){
         this.code = code;
-        this.msg = label;
+        this.message = message;
         this.data = data;
     }
 
     /**
      * 设置status，如果msg为空则msg设置为status.label
-     * @param status
+     * @param code
      * @return
      */
-    public JsonResult<T> status(Status status){
-        this.code = status.code();
-        if(this.msg == null){
-            this.msg = status.label();
+    public JsonResult<T> status(ICode code){
+        this.code = code.getCode();
+        if(this.message == null){
+            this.message = code.getMsg();
         }
         return this;
     }
@@ -156,14 +164,31 @@ public class JsonResult<T> implements Serializable {
         return this;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
-    public String getMsg() {
-        return msg;
+
+    @Override
+    public String getMessage() {
+        return message;
     }
     public T getData() {
         return filterJsonResultData(data);
+    }
+
+    @Override
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    @Override
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public void setData(T t) {
+        this.data = t;
     }
 
     /***
@@ -181,11 +206,11 @@ public class JsonResult<T> implements Serializable {
      */
     private void initMsg(String additionalMsg){
         if(V.notEmpty(additionalMsg)){
-            if(S.startsWith(additionalMsg, this.msg)){
-                this.msg = additionalMsg;
+            if(S.startsWith(additionalMsg, this.message)){
+                this.message = additionalMsg;
             }
             else{
-                this.msg += ": " + additionalMsg;
+                this.message += ": " + additionalMsg;
             }
         }
     }
@@ -202,87 +227,87 @@ public class JsonResult<T> implements Serializable {
      * 请求处理成功
      */
     public static <T> JsonResult<T> OK(){
-        return new JsonResult<>(Status.OK);
+        return new JsonResult<>(BaseCode.SUCCESS);
     }
     /***
      * 请求处理成功
      */
     public static <T> JsonResult<T> OK(T data){
-        return new JsonResult<>(Status.OK, data);
+        return new JsonResult<>(BaseCode.SUCCESS, data);
     }
 
     /***
      * 部分成功（一般用于批量处理场景，只处理筛选后的合法数据）
      */
     public static <T> JsonResult<T> WARN_PARTIAL_SUCCESS(String msg){
-        return new JsonResult<T>(Status.WARN_PARTIAL_SUCCESS).msg(msg);
+        return new JsonResult<T>(BaseCode.WARN_PARTIAL_SUCCESS).msg(msg);
     }
     /***
      * 有潜在的性能问题
      */
     public static <T> JsonResult<T> WARN_PERFORMANCE_ISSUE(String msg){
-        return new JsonResult<T>(Status.WARN_PERFORMANCE_ISSUE).msg(msg);
+        return new JsonResult<T>(BaseCode.WARN_PERFORMANCE_ISSUE).msg(msg);
     }
     /***
      * 传入参数不对
      */
     public static <T> JsonResult<T> FAIL_INVALID_PARAM(String msg){
-        return new JsonResult<T>(Status.FAIL_INVALID_PARAM).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_INVALID_PARAM).msg(msg);
     }
     /***
      * Token无效或已过期
      */
     public static <T> JsonResult<T> FAIL_INVALID_TOKEN(String msg){
-        return new JsonResult<T>(Status.FAIL_INVALID_TOKEN).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_INVALID_TOKEN).msg(msg);
     }
     /***
      * 没有权限执行该操作
      */
     public static <T> JsonResult<T> FAIL_NO_PERMISSION(String msg){
-        return new JsonResult<T>(Status.FAIL_NO_PERMISSION).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_NO_PERMISSION).msg(msg);
     }
     /***
      * 请求资源不存在
      */
     public static <T> JsonResult<T> FAIL_NOT_FOUND(String msg){
-        return new JsonResult<T>(Status.FAIL_NOT_FOUND).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_NOT_FOUND).msg(msg);
     }
     /***
      * 数据校验不通过
      */
     public static <T> JsonResult<T> FAIL_VALIDATION(String msg){
-        return new JsonResult<T>(Status.FAIL_VALIDATION).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_VALIDATION).msg(msg);
     }
     /***
      * 操作执行失败
      */
     public static <T> JsonResult<T> FAIL_OPERATION(String msg){
-        return new JsonResult<T>(Status.FAIL_OPERATION).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_OPERATION).msg(msg);
     }
     /***
      * 系统异常
      */
     public static <T> JsonResult<T> FAIL_EXCEPTION(String msg){
-        return new JsonResult<T>(Status.FAIL_EXCEPTION).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_EXCEPTION).msg(msg);
     }
     /***
      * 服务不可用
      */
     public static <T> JsonResult<T> FAIL_FAIL_REQUEST_TIMEOUT(String msg){
-        return new JsonResult<T>(Status.FAIL_REQUEST_TIMEOUT).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_REQUEST_TIMEOUT).msg(msg);
     }
     /***
      * 服务不可用
      */
     public static <T> JsonResult<T> FAIL_SERVICE_UNAVAILABLE(String msg){
-        return new JsonResult<T>(Status.FAIL_SERVICE_UNAVAILABLE).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_SERVICE_UNAVAILABLE).msg(msg);
     }
 
     /***
      * 认证不通过
      */
     public static <T> JsonResult<T> FAIL_AUTHENTICATION(String msg){
-        return new JsonResult<T>(Status.FAIL_AUTHENTICATION).msg(msg);
+        return new JsonResult<T>(BaseCode.FAIL_AUTHENTICATION).msg(msg);
     }
 
     /**

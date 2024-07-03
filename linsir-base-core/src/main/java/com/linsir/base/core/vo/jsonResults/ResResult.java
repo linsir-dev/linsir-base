@@ -15,6 +15,7 @@ import lombok.Data;
  * @Version: 0.0.1$
  */
 
+@Deprecated
 @Data
 public class ResResult<T> {
 

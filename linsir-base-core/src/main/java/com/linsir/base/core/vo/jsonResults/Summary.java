@@ -9,6 +9,7 @@ import lombok.Data;
  * @version 0.0.1
  * @date 2022/08/16 19:40:33
  */
+@Deprecated
 @Data
 public class Summary {
 

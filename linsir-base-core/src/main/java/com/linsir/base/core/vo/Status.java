@@ -21,6 +21,8 @@ package com.linsir.base.core.vo;
  * @version v2.0
  * @date 2019/01/01
  */
+
+@Deprecated
 public enum Status {
     /***
      * 请求处理成功
