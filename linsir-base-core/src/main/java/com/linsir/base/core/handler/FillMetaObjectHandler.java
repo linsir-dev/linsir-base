@@ -22,7 +22,7 @@ import java.util.Date;
 public class FillMetaObjectHandler implements MetaObjectHandler {
 
 
-  private SysUserDto sysUserDto = null;
+  private SysUserDto sysUserDto = new SysUserDto();
 
 
     /**
@@ -32,11 +32,11 @@ public class FillMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
 
-        if(sysUserDto == null)
-        {
+        /*if(sysUserDto == null)
+        {*/
             getUseInfo();
-        }
-
+       /* }
+*/
         log.info("无论是否获取用户信息，插入时间都需要放入");
         //时间是默认需要插入进去的
         this.strictInsertFill(metaObject, "createdTime", Date.class, new Date());
@@ -72,10 +72,10 @@ public class FillMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
 
-        if(sysUserDto == null)
-        {
+        /*if(sysUserDto == null)
+        {*/
             getUseInfo();
-        }
+       /* }*/
 
         this.strictInsertFill(metaObject, "updatedTime", Date.class, new Date());
         if(sysUserDto!=null)
@@ -154,6 +154,7 @@ public class FillMetaObjectHandler implements MetaObjectHandler {
             }
         }*/
         this.sysUserDto.setUserId(1L);
+        this.sysUserDto.setUsername("linsir");
     }
 
 
