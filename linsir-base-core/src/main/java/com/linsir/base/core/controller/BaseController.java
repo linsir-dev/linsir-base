@@ -50,7 +50,7 @@ public class BaseController {
     protected DictionaryService dictionaryService;
 
     protected R exec(String logName, ControllerCallable callable) throws Exception {
-        log.info(">>>log:"+logName);
+        log.info(">>>log:>>>URL:"+request.getRequestURI()+logName);
         R result =null;
         try {
             result = callable.execute();
