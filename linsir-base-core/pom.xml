@@ -122,6 +122,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.linsir</groupId>
+            <artifactId>linsir-starter-log</artifactId>
+        </dependency>
+
         <!--springboot2.6+解决metrics端点不显示jvm信息的问题-->
         <!-- <dependency>
              <groupId>javax.xml.bind</groupId>
