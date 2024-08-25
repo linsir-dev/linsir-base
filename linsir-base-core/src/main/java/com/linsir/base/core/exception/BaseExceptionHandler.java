@@ -5,7 +5,6 @@ package com.linsir.base.core.exception;
 import com.linsir.base.core.code.BaseCode;
 import com.linsir.base.core.util.V;
 import com.linsir.base.core.vo.Result;
-import com.linsir.base.core.vo.jsonResults.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
