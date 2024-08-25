@@ -1,6 +1,5 @@
 package com.linsir.base.core.dto;
 
-import lombok.Data;
 
 /**
  * @author linsir
@@ -11,10 +10,10 @@ import lombok.Data;
  */
 
 
-@Data
-public class PageQuery {
 
-    private long pageNum;
+public interface PageQuery {
 
-    private long pageSize;
+     long pageNum = 1;
+
+     long pageSize = 10;
 }
